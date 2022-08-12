@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../custom_icons_icons.dart';
+import '../models/cep_model.dart';
 import '../widgets/bottom_navigation.dart';
+import '../bloc/cep/blocs.dart';
 
 class Search extends StatelessWidget {
   const Search({Key? key}) : super(key: key);
@@ -12,7 +15,8 @@ class Search extends StatelessWidget {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: const [
-          SearchBar(),
+          // SearchBar(),
+          SearchResults(),
         ],
       ),
       bottomNavigationBar: const BottomNavigation(),
@@ -84,7 +88,7 @@ class SearchBar extends StatelessWidget {
                   fontSize: ScreenUtil().setSp(14),
                   fontWeight: FontWeight.w400,
                   color: const Color.fromARGB(255, 128, 128, 137),
-                  height: 1.305,
+                  height: 1.5,
                 ),
                 decoration: InputDecoration(
                   // icon with padding
@@ -114,4 +118,57 @@ class SearchBar extends StatelessWidget {
       ),
     );
   }
+}
+
+class SearchResults extends StatefulWidget {
+  const SearchResults({Key? key}) : super(key: key);
+
+  @override
+  State<SearchResults> createState() => _SearchResultsState();
+}
+
+class _SearchResultsState extends State<SearchResults> {
+  final CepBloc _cepBloc = CepBloc();
+  @override
+  void initState() {
+    _cepBloc.add(GetCep());
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<CepBloc>(
+      create: (_) => _cepBloc,
+      child: BlocListener<CepBloc, CepState>(
+        listener: (context, state) {
+          if (state is CepError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message!),
+              ),
+            );
+          }
+        },
+        child: BlocBuilder<CepBloc, CepState>(
+          builder: (context, state) {
+            if (state is CepInitial) {
+              return Container();
+            } else if (state is CepLoading) {
+              return Container();
+            } else if (state is CepLoaded) {
+              return _buildCard(context, state.cepModel);
+            } else if (state is CepError) {
+              return Container();
+            } else {
+              return Container();
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+
+Widget _buildCard(BuildContext context, CepModel cepModel) {
+  return Text('${cepModel.cep}');
 }

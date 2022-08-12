@@ -1,4 +1,4 @@
-class CEP {
+class CepModel {
   String? cep;
   String? logradouro;
   String? complemento;
@@ -9,8 +9,9 @@ class CEP {
   String? gia;
   String? ddd;
   String? siafi;
+  String? error;
 
-  CEP(
+  CepModel(
       {this.cep,
       this.logradouro,
       this.complemento,
@@ -22,7 +23,7 @@ class CEP {
       this.ddd,
       this.siafi});
 
-  CEP.fromJson(Map<String, dynamic> json) {
+  CepModel.fromJson(Map<String, dynamic> json) {
     cep = json['cep'];
     logradouro = json['logradouro'];
     complemento = json['complemento'];
@@ -48,5 +49,9 @@ class CEP {
     data['ddd'] = ddd;
     data['siafi'] = siafi;
     return data;
+  }
+
+  CepModel.withError(String errorMessage) {
+    return;
   }
 }
