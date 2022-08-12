@@ -10,7 +10,7 @@ class CepBloc extends Bloc<CepEvent, CepState> {
     on<GetCep>((event, emit) async {
       try {
         emit(CepLoading());
-        final mList = await _apiRepository.fetchCepList();
+        final mList = await _apiRepository.fetchCepList(event.cep);
         emit(CepLoaded(mList));
         if (mList.error != null) {
           emit(CepError(mList.error));

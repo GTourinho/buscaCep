@@ -4,8 +4,8 @@ import 'api_provider.dart';
 class ApiRepository {
   final _provider = ApiProvider();
 
-  Future<CepModel> fetchCepList() {
-    return _provider.fetchCEPList();
+  Future<CepModel> fetchCepList(String cep) {
+    return _provider.fetchCEPList(cep);
   }
 }
 

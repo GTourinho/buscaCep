@@ -7,4 +7,7 @@ abstract class CepEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetCep extends CepEvent {}
+class GetCep extends CepEvent {
+  final String cep;
+  const GetCep({required this.cep});
+}

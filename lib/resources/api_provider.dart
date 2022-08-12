@@ -4,11 +4,11 @@ import '../models/cep_model.dart';
 
 class ApiProvider {
   final Dio _dio = Dio();
-  final String _url = 'https://viacep.com.br/ws/40140090/json';
+  final String _baseUrl = 'https://viacep.com.br/ws/';
 
-  Future<CepModel> fetchCEPList() async {
+  Future<CepModel> fetchCEPList(String cep) async {
     try {
-      Response response = await _dio.get(_url);
+      Response response = await _dio.get(_baseUrl + cep + '/json');
       return CepModel.fromJson(response.data);
     } catch (error) {
       return CepModel.withError("Data not found / Connection issue");

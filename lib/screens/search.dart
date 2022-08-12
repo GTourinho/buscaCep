@@ -15,7 +15,7 @@ class Search extends StatelessWidget {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: const [
-          // SearchBar(),
+          SearchBar(),
           SearchResults(),
         ],
       ),
@@ -131,7 +131,7 @@ class _SearchResultsState extends State<SearchResults> {
   final CepBloc _cepBloc = CepBloc();
   @override
   void initState() {
-    _cepBloc.add(GetCep());
+    _cepBloc.add(const GetCep(cep: '40140090'));
     super.initState();
   }
 
