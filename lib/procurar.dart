@@ -11,9 +11,11 @@ class Procurar extends StatelessWidget {
     return BlocListener<NavigationBloc, NavigationState>(
       listener: (context, state) {
         if (state.currentNavItem == NavItem.home) {
+          Navigator.pop(context);
           Navigator.of(context).pushNamed('/');
         }
         if (state.currentNavItem == NavItem.search) {
+          Navigator.pop(context);
           Navigator.of(context).pushNamed('/search');
         }
       },

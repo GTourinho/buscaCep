@@ -51,7 +51,12 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<NavigationBloc, NavigationState>(
       listener: (context, state) {
+        if (state.currentNavItem == NavItem.home) {
+          Navigator.pop(context);
+          Navigator.of(context).pushNamed('/');
+        }
         if (state.currentNavItem == NavItem.search) {
+          Navigator.pop(context);
           Navigator.of(context).pushNamed('/search');
         }
       },
