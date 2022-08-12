@@ -14,13 +14,10 @@ class Search extends StatelessWidget {
     return BlocProvider(
       create: (context) => CepBloc(),
       child: Scaffold(
-        extendBodyBehindAppBar: true,
-        body: Stack(
-          children: const [
-            SearchBar(),
-            SearchResults(),
-          ],
-        ),
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(ScreenUtil().setHeight(232)),
+            child: const SearchBar()),
+        body: const SearchResults(),
         bottomNavigationBar: const BottomNavigation(),
       ),
     );
@@ -130,14 +127,8 @@ class _SearchBarState extends State<SearchBar> {
   }
 }
 
-class SearchResults extends StatefulWidget {
+class SearchResults extends StatelessWidget {
   const SearchResults({Key? key}) : super(key: key);
-
-  @override
-  State<SearchResults> createState() => _SearchResultsState();
-}
-
-class _SearchResultsState extends State<SearchResults> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<CepBloc, CepState>(
@@ -170,5 +161,44 @@ class _SearchResultsState extends State<SearchResults> {
 }
 
 Widget _buildCard(BuildContext context, CepModel cepModel) {
-  return Text('${cepModel.cep}');
+  return Padding(
+    padding: EdgeInsets.only(
+      left: ScreenUtil().setWidth(32),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Endereço:',
+          textAlign: TextAlign.start,
+          style: GoogleFonts.poppins(
+            fontSize: ScreenUtil().setSp(19),
+            fontWeight: FontWeight.w500,
+            color: const Color.fromARGB(255, 109, 81, 255),
+            letterSpacing: 0.013,
+            height: 1.11,
+          ),
+        ),
+        Padding(padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(17))),
+        Text(
+          '${cepModel.logradouro} - ${cepModel.complemento} - ${cepModel.localidade} ${cepModel.uf} -\nCEP ${cepModel.cep}',
+          style: GoogleFonts.poppins(
+            fontSize: ScreenUtil().setSp(15),
+            fontWeight: FontWeight.w400,
+            color: const Color.fromARGB(255, 0, 0, 0),
+            letterSpacing: 0.013,
+            height: 1.4,
+          ),
+        ),
+        Padding(padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(17))),
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Color.fromARGB(255, 46, 23, 157),
+          ),
+        ),
+      ],
+    ),
+  );
 }
