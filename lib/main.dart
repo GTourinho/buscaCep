@@ -1,3 +1,4 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/custom_icons_icons.dart';
@@ -5,8 +6,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myapp/procurar.dart';
 
+import 'bloc/navigation_bloc.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(BlocProvider<NavigationBloc>(
+      create: (context) => NavigationBloc(
+            NavigationState(currentNavItem: NavItem.home),
+          ),
+      child: BlocBuilder<NavigationBloc, NavigationState>(
+          builder: ((context, state) => MyApp()))));
 }
 
 class MyApp extends StatelessWidget {
@@ -19,6 +27,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
             primarySwatch: Colors.blue,
@@ -27,10 +36,8 @@ class MyApp extends StatelessWidget {
           ),
           initialRoute: '/',
           routes: {
-            '/': (context) => const MyHomePage(
-                  title: 'Busca Cep',
-                ),
-            '/procurar': (context) => const Procurar(),
+            '/': (context) => MyHomePage(),
+            '/search': (context) => const Procurar(),
           },
         );
       },
@@ -38,63 +45,64 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        children: const [
-          WelcomeBar(),
-          BackgroundImage(),
-          SearchAmounts(),
-          SavedCEPS(),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushNamed(context, '/');
-          } else {
-            Navigator.pushNamed(context, '/procurar');
-          }
-        },
-        elevation: 0,
-        backgroundColor: Colors.white,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color.fromARGB(255, 109, 81, 255),
-        unselectedItemColor: const Color.fromARGB(255, 125, 133, 136),
-        selectedLabelStyle: TextStyle(
-            fontSize: ScreenUtil().setSp(10),
-            fontFamily: 'poppins',
-            fontWeight: FontWeight.w500),
-        unselectedLabelStyle: TextStyle(
-            fontSize: ScreenUtil().setSp(10),
-            fontFamily: 'poppins',
-            fontWeight: FontWeight.w500),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(CustomIcons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CustomIcons.signpost),
-            label: 'Procurar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CustomIcons.star),
-            label: 'Favoritos',
-          ),
-        ],
+    return BlocListener<NavigationBloc, NavigationState>(
+      listener: (context, state) {
+        if (state.currentNavItem == NavItem.search) {
+          Navigator.of(context).pushNamed('/search');
+        }
+      },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        body: Stack(
+          children: const [
+            WelcomeBar(),
+            BackgroundImage(),
+            SearchAmounts(),
+            SavedCEPS(),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: (index) {
+            if (index == 0) {
+              BlocProvider.of<NavigationBloc>(context)
+                  .add(const NavigateTo(destination: NavItem.home));
+            } else {
+              BlocProvider.of<NavigationBloc>(context)
+                  .add(const NavigateTo(destination: NavItem.search));
+            }
+          },
+          elevation: 0,
+          backgroundColor: Colors.white,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: const Color.fromARGB(255, 109, 81, 255),
+          unselectedItemColor: const Color.fromARGB(255, 125, 133, 136),
+          selectedLabelStyle: TextStyle(
+              fontSize: ScreenUtil().setSp(10),
+              fontFamily: 'poppins',
+              fontWeight: FontWeight.w500),
+          unselectedLabelStyle: TextStyle(
+              fontSize: ScreenUtil().setSp(10),
+              fontFamily: 'poppins',
+              fontWeight: FontWeight.w500),
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(CustomIcons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CustomIcons.signpost),
+              label: 'Procurar',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CustomIcons.star),
+              label: 'Favoritos',
+            ),
+          ],
+        ),
       ),
     );
   }
