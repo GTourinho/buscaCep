@@ -7,7 +7,7 @@ import '../bloc/navigation/navigation_state.dart';
 import '../custom_icons_icons.dart';
 
 class BottomNavigation extends StatelessWidget {
-  BottomNavigation({Key? key}) : super(key: key);
+  const BottomNavigation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

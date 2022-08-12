@@ -7,11 +7,11 @@ import '../bloc/navigation/blocs.dart';
 import 'screens/favourites.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocProvider<NavigationBloc>(
@@ -34,10 +34,10 @@ class MyApp extends StatelessWidget {
                 scaffoldBackgroundColor: Colors.white,
               ),
               home: snapshot.currentNavItem == NavItem.home
-                  ? Home()
+                  ? const Home()
                   : snapshot.currentNavItem == NavItem.search
-                      ? Search()
-                      : Favourites(),
+                      ? const Search()
+                      : const Favourites(),
             );
           });
         },
