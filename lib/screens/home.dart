@@ -8,32 +8,20 @@ import '../widgets/bottom_navigation.dart';
 import '../bloc/navigation/blocs.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  Home({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocListener<NavigationBloc, NavigationState>(
-      listener: (context, state) {
-        if (state.currentNavItem == NavItem.home) {
-          Navigator.pop(context);
-          Navigator.of(context).pushNamed('/');
-        }
-        if (state.currentNavItem == NavItem.search) {
-          Navigator.pop(context);
-          Navigator.of(context).pushNamed('/search');
-        }
-      },
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        body: Stack(
-          children: const [
-            WelcomeBar(),
-            BackgroundImage(),
-            SearchAmounts(),
-            SavedCEPS(),
-          ],
-        ),
-        bottomNavigationBar: const BottomNavigation(),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: const [
+          WelcomeBar(),
+          BackgroundImage(),
+          SearchAmounts(),
+          SavedCEPS(),
+        ],
       ),
+      bottomNavigationBar: BottomNavigation(),
     );
   }
 }
