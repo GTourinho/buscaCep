@@ -5,18 +5,18 @@ import '../../resources/api_repository.dart';
 
 class CepBloc extends Bloc<CepEvent, CepState> {
   CepBloc() : super(CepInitial()) {
-    final ApiRepository _apiRepository = ApiRepository();
+    final ApiRepository apiRepository = ApiRepository();
 
     on<GetCep>((event, emit) async {
       try {
         emit(CepLoading());
-        final mList = await _apiRepository.fetchCepList(event.cep);
+        final mList = await apiRepository.fetchCepList(event.cep);
         emit(CepLoaded(mList));
         if (mList.error != null) {
           emit(CepError(mList.error));
         }
       } on NetworkError {
-        emit(CepError("Failed to fetch data. is your device online?"));
+        emit(const CepError("Failed to fetch data. is your device online?"));
       }
     });
   }

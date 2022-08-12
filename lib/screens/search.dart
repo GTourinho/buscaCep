@@ -11,21 +11,31 @@ class Search extends StatelessWidget {
   const Search({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        children: const [
-          SearchBar(),
-          SearchResults(),
-        ],
+    return BlocProvider(
+      create: (context) => CepBloc(),
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        body: Stack(
+          children: const [
+            SearchBar(),
+            SearchResults(),
+          ],
+        ),
+        bottomNavigationBar: const BottomNavigation(),
       ),
-      bottomNavigationBar: const BottomNavigation(),
     );
   }
 }
 
-class SearchBar extends StatelessWidget {
+class SearchBar extends StatefulWidget {
   const SearchBar({Key? key}) : super(key: key);
+
+  @override
+  State<SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<SearchBar> {
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +92,10 @@ class SearchBar extends StatelessWidget {
                   Radius.circular(100),
                 ),
               ),
-              // Text input
               child: TextField(
+                controller: _controller,
+                onSubmitted: (value) =>
+                    BlocProvider.of<CepBloc>(context).add(GetCep(cep: value)),
                 style: GoogleFonts.inter(
                   fontSize: ScreenUtil().setSp(14),
                   fontWeight: FontWeight.w400,
@@ -91,7 +103,6 @@ class SearchBar extends StatelessWidget {
                   height: 1.5,
                 ),
                 decoration: InputDecoration(
-                  // icon with padding
                   prefixIcon: Padding(
                     padding:
                         EdgeInsets.fromLTRB(ScreenUtil().setWidth(16), 0, 0, 0),
@@ -101,7 +112,6 @@ class SearchBar extends StatelessWidget {
                       size: ScreenUtil().setHeight(18),
                     ),
                   ),
-
                   border: InputBorder.none,
                   hintText: 'Digite o CEP',
                   hintStyle: GoogleFonts.inter(
@@ -128,42 +138,32 @@ class SearchResults extends StatefulWidget {
 }
 
 class _SearchResultsState extends State<SearchResults> {
-  final CepBloc _cepBloc = CepBloc();
-  @override
-  void initState() {
-    _cepBloc.add(const GetCep(cep: '40140090'));
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CepBloc>(
-      create: (_) => _cepBloc,
-      child: BlocListener<CepBloc, CepState>(
-        listener: (context, state) {
-          if (state is CepError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message!),
-              ),
-            );
+    return BlocListener<CepBloc, CepState>(
+      listener: (context, state) {
+        if (state is CepError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message!),
+            ),
+          );
+        }
+      },
+      child: BlocBuilder<CepBloc, CepState>(
+        builder: (context, state) {
+          if (state is CepInitial) {
+            return Container();
+          } else if (state is CepLoading) {
+            return Container();
+          } else if (state is CepLoaded) {
+            return _buildCard(context, state.cepModel);
+          } else if (state is CepError) {
+            return Container();
+          } else {
+            return Container();
           }
         },
-        child: BlocBuilder<CepBloc, CepState>(
-          builder: (context, state) {
-            if (state is CepInitial) {
-              return Container();
-            } else if (state is CepLoading) {
-              return Container();
-            } else if (state is CepLoaded) {
-              return _buildCard(context, state.cepModel);
-            } else if (state is CepError) {
-              return Container();
-            } else {
-              return Container();
-            }
-          },
-        ),
       ),
     );
   }
