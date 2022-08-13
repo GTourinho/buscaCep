@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../models/cep_model.dart';
 
 abstract class CepEvent extends Equatable {
   const CepEvent();
@@ -10,4 +11,9 @@ abstract class CepEvent extends Equatable {
 class GetCep extends CepEvent {
   final String cep;
   const GetCep({required this.cep});
+}
+
+class SaveCep extends CepEvent {
+  final CepModel cepModel;
+  const SaveCep({required this.cepModel});
 }

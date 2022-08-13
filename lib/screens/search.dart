@@ -149,6 +149,10 @@ class SearchResults extends StatelessWidget {
             return Container();
           } else if (state is CepLoaded) {
             return _buildCard(context, state.cepModel);
+          } else if (state is CepSaved) {
+            return _buildCard(context, state.cepModel);
+          } else if (state is CepError) {
+            return Container();
           } else if (state is CepError) {
             return Container();
           } else {
@@ -161,6 +165,8 @@ class SearchResults extends StatelessWidget {
 }
 
 Widget _buildCard(BuildContext context, CepModel cepModel) {
+  final bool isCepSaved =
+      BlocProvider.of<CepBloc>(context).state is CepSaved ? true : false;
   return Padding(
     padding: EdgeInsets.only(
       left: ScreenUtil().setWidth(32),
@@ -192,43 +198,58 @@ Widget _buildCard(BuildContext context, CepModel cepModel) {
           ),
         ),
         Padding(padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(29))),
-        Container(
-          width: ScreenUtil().setWidth(296),
-          height: ScreenUtil().setHeight(48),
-          decoration: const BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: Color.fromARGB(255, 46, 23, 157),
-            borderRadius: BorderRadius.all(
-              Radius.circular(72),
+        InkWell(
+          onTap: () {
+            BlocProvider.of<CepBloc>(context).add(SaveCep(cepModel: cepModel));
+          },
+          child: Container(
+            width: ScreenUtil().setWidth(296),
+            height: ScreenUtil().setHeight(48),
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: isCepSaved
+                  ? const Color.fromARGB(255, 245, 245, 248)
+                  : const Color.fromARGB(255, 46, 23, 157),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(72),
+              ),
             ),
-          ),
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: ScreenUtil().setWidth(23),
-              right: ScreenUtil().setWidth(23),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(
-                  CustomIcons.star,
-                  color: const Color.fromARGB(255, 180, 166, 255),
-                  size: ScreenUtil().setHeight(24),
-                ),
-                Text(
-                  'Adicionar aos favoritos',
-                  style: GoogleFonts.hind(
-                    fontSize: ScreenUtil().setSp(16),
-                    fontWeight: FontWeight.w500,
-                    color: const Color.fromARGB(255, 255, 255, 255),
-                    letterSpacing: 0.013,
-                    height: 1,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: ScreenUtil().setWidth(23),
+                right: ScreenUtil().setWidth(23),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  isCepSaved
+                      ? Icon(
+                          CustomIcons.starsaved,
+                          color: const Color.fromARGB(255, 234, 183, 1),
+                          size: ScreenUtil().setHeight(24),
+                        )
+                      : Icon(
+                          CustomIcons.star,
+                          color: const Color.fromARGB(255, 180, 166, 255),
+                          size: ScreenUtil().setHeight(24),
+                        ),
+                  Text(
+                    'Adicionar aos favoritos',
+                    style: GoogleFonts.hind(
+                      fontSize: ScreenUtil().setSp(16),
+                      fontWeight: FontWeight.w500,
+                      color: isCepSaved
+                          ? const Color.fromARGB(255, 123, 97, 255)
+                          : const Color.fromARGB(255, 255, 255, 255),
+                      letterSpacing: 0.013,
+                      height: 1,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: ScreenUtil().setHeight(24),
-                ),
-              ],
+                  SizedBox(
+                    width: ScreenUtil().setHeight(24),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

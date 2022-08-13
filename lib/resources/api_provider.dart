@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-
 import '../models/cep_model.dart';
 
 class ApiProvider {

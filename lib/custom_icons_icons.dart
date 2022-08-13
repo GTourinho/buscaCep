@@ -39,4 +39,6 @@ class CustomIcons {
       IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData search =
       IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData starsaved =
+      IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

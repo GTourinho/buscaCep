@@ -17,6 +17,11 @@ class CepLoaded extends CepState {
   const CepLoaded(this.cepModel);
 }
 
+class CepSaved extends CepState {
+  final CepModel cepModel;
+  const CepSaved(this.cepModel);
+}
+
 class CepError extends CepState {
   final String? message;
   const CepError(this.message);
