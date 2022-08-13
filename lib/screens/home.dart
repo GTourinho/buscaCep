@@ -1,25 +1,43 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/custom_icons_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../bloc/cep/blocs.dart';
 import '../widgets/bottom_navigation.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    BlocProvider.of<CepBloc>(context).add(const GetAmounts());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        children: const [
-          WelcomeBar(),
-          BackgroundImage(),
-          SearchAmounts(),
-          SavedCEPS(),
-        ],
-      ),
-      bottomNavigationBar: const BottomNavigation(),
+    return BlocBuilder<CepBloc, CepState>(
+      builder: (context, state) {
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          body: Stack(
+            children: [
+              const WelcomeBar(),
+              const BackgroundImage(),
+              searchAmounts(context, state),
+              const SavedCEPS(),
+            ],
+          ),
+          bottomNavigationBar: const BottomNavigation(),
+        );
+      },
     );
   }
 }
@@ -97,61 +115,58 @@ class BackgroundImage extends StatelessWidget {
   }
 }
 
-class SearchAmounts extends StatelessWidget {
-  const SearchAmounts({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: ScreenUtil().setHeight(399),
-      left: ScreenUtil().setWidth(79),
-      child: Container(
-        height: ScreenUtil().setHeight(202),
-        width: ScreenUtil().setWidth(202),
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Color.fromARGB(255, 109, 81, 255),
-        ),
-        child: searchAmountsDetails(),
+Widget searchAmounts(BuildContext context, CepState state) {
+  return Positioned(
+    top: ScreenUtil().setHeight(399),
+    left: ScreenUtil().setWidth(79),
+    child: Container(
+      height: ScreenUtil().setHeight(202),
+      width: ScreenUtil().setWidth(202),
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color.fromARGB(255, 109, 81, 255),
       ),
-    );
-  }
+      child: searchAmountsDetails(context, state),
+    ),
+  );
+}
 
-  Column searchAmountsDetails() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+Column searchAmountsDetails(BuildContext context, CepState state) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Icon(
+        CustomIcons.signpost,
+        size: ScreenUtil().setHeight(52),
+        color: const Color.fromARGB(255, 180, 166, 255),
+      ),
+      searchAmountsDetailsText(context, state),
+    ],
+  );
+}
+
+Text searchAmountsDetailsText(BuildContext context, CepState state) {
+  return Text.rich(
+    textAlign: TextAlign.center,
+    TextSpan(
+      text: state is CepAmountsLoaded ? state.searchAmount.toString() : '0',
+      style: GoogleFonts.inter(
+        fontSize: ScreenUtil().setSp(60),
+        fontWeight: FontWeight.w500,
+        color: const Color.fromARGB(255, 255, 255, 255),
+      ),
       children: [
-        Icon(
-          CustomIcons.signpost,
-          size: ScreenUtil().setHeight(52),
-          color: const Color.fromARGB(255, 180, 166, 255),
-        ),
-        searchAmountsDetailsText(),
-      ],
-    );
-  }
-
-  Text searchAmountsDetailsText() {
-    return Text.rich(
-      TextSpan(
-        text: '525',
-        style: GoogleFonts.inter(
-          fontSize: ScreenUtil().setSp(60),
-          fontWeight: FontWeight.w500,
-          color: const Color.fromARGB(255, 255, 255, 255),
-        ),
-        children: [
-          TextSpan(
-            text: '\nCEPs pesquisados',
-            style: GoogleFonts.inter(
-              fontSize: ScreenUtil().setSp(12),
-              fontWeight: FontWeight.w500,
-              color: const Color.fromARGB(255, 255, 255, 255),
-            ),
+        TextSpan(
+          text: '\nCEPs pesquisados',
+          style: GoogleFonts.inter(
+            fontSize: ScreenUtil().setSp(12),
+            fontWeight: FontWeight.w500,
+            color: const Color.fromARGB(255, 255, 255, 255),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
 }
 
 class SavedCEPS extends StatelessWidget {

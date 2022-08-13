@@ -35,3 +35,11 @@ class CepError extends CepState {
   final String? message;
   const CepError(this.message);
 }
+
+class CepAmountsLoading extends CepState {}
+
+class CepAmountsLoaded extends CepState {
+  final int searchAmount;
+  final int savedAmount;
+  const CepAmountsLoaded(this.searchAmount, this.savedAmount);
+}

@@ -21,3 +21,7 @@ class SaveCep extends CepEvent {
 class GetSavedCeps extends CepEvent {
   const GetSavedCeps();
 }
+
+class GetAmounts extends CepEvent {
+  const GetAmounts();
+}
