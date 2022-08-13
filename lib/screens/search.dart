@@ -45,83 +45,102 @@ class _SearchBarState extends State<SearchBar> {
       ),
       child: Stack(
         children: [
-          Positioned(
-            top: ScreenUtil().setHeight(50),
-            left: ScreenUtil().setWidth(32),
-            child: Text(
-              'Procurar CEP',
-              style: GoogleFonts.poppins(
-                fontSize: ScreenUtil().setSp(27),
-                fontWeight: FontWeight.w600,
-                color: const Color.fromARGB(255, 255, 255, 255),
-                height: 1.125,
-              ),
-            ),
-          ),
-          Positioned(
-            top: ScreenUtil().setHeight(99),
-            left: ScreenUtil().setWidth(51),
-            child: SizedBox(
-              width: ScreenUtil().setWidth(256),
-              height: ScreenUtil().setHeight(46),
-              child: Text(
-                'Digite o CEP que você\ndeseja procurar',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  fontSize: ScreenUtil().setSp(18),
-                  fontWeight: FontWeight.w500,
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                  height: 1.305,
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: ScreenUtil().setHeight(161),
-            left: ScreenUtil().setWidth(32),
-            child: Container(
-              height: ScreenUtil().setHeight(50),
-              width: ScreenUtil().setWidth(293),
-              decoration: const BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Color.fromARGB(255, 255, 255, 255),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(100),
-                ),
-              ),
-              child: TextField(
-                controller: _controller,
-                onSubmitted: (value) =>
-                    BlocProvider.of<CepBloc>(context).add(GetCep(cep: value)),
-                style: GoogleFonts.inter(
-                  fontSize: ScreenUtil().setSp(14),
-                  fontWeight: FontWeight.w400,
-                  color: const Color.fromARGB(255, 128, 128, 137),
-                  height: 1.5,
-                ),
-                decoration: InputDecoration(
-                  prefixIcon: Padding(
-                    padding:
-                        EdgeInsets.fromLTRB(ScreenUtil().setWidth(16), 0, 0, 0),
-                    child: Icon(
-                      CustomIcons.search,
-                      color: const Color.fromARGB(255, 128, 128, 137),
-                      size: ScreenUtil().setHeight(18),
-                    ),
-                  ),
-                  border: InputBorder.none,
-                  hintText: 'Digite o CEP',
-                  hintStyle: GoogleFonts.inter(
-                    fontSize: ScreenUtil().setSp(14),
-                    fontWeight: FontWeight.w400,
-                    color: const Color.fromARGB(255, 128, 128, 137),
-                    height: 1.5,
-                  ),
-                ),
-              ),
-            ),
-          )
+          searchBarHeader(),
+          searchBarText(),
+          searchContainer(context)
         ],
+      ),
+    );
+  }
+
+  Positioned searchContainer(BuildContext context) {
+    return Positioned(
+      top: ScreenUtil().setHeight(161),
+      left: ScreenUtil().setWidth(32),
+      child: Container(
+        height: ScreenUtil().setHeight(50),
+        width: ScreenUtil().setWidth(293),
+        decoration: const BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Color.fromARGB(255, 255, 255, 255),
+          borderRadius: BorderRadius.all(
+            Radius.circular(100),
+          ),
+        ),
+        child: searchTextField(context),
+      ),
+    );
+  }
+
+  TextField searchTextField(BuildContext context) {
+    return TextField(
+      controller: _controller,
+      onSubmitted: (value) =>
+          BlocProvider.of<CepBloc>(context).add(GetCep(cep: value)),
+      style: GoogleFonts.inter(
+        fontSize: ScreenUtil().setSp(14),
+        fontWeight: FontWeight.w400,
+        color: const Color.fromARGB(255, 128, 128, 137),
+        height: 1.5,
+      ),
+      decoration: searchDecoration(),
+    );
+  }
+
+  InputDecoration searchDecoration() {
+    return InputDecoration(
+      prefixIcon: Padding(
+        padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(16), 0, 0, 0),
+        child: Icon(
+          CustomIcons.search,
+          color: const Color.fromARGB(255, 128, 128, 137),
+          size: ScreenUtil().setHeight(18),
+        ),
+      ),
+      border: InputBorder.none,
+      hintText: 'Digite o CEP',
+      hintStyle: GoogleFonts.inter(
+        fontSize: ScreenUtil().setSp(14),
+        fontWeight: FontWeight.w400,
+        color: const Color.fromARGB(255, 128, 128, 137),
+        height: 1.5,
+      ),
+    );
+  }
+
+  Positioned searchBarText() {
+    return Positioned(
+      top: ScreenUtil().setHeight(99),
+      left: ScreenUtil().setWidth(51),
+      child: SizedBox(
+        width: ScreenUtil().setWidth(256),
+        height: ScreenUtil().setHeight(46),
+        child: Text(
+          'Digite o CEP que você\ndeseja procurar',
+          textAlign: TextAlign.center,
+          style: GoogleFonts.poppins(
+            fontSize: ScreenUtil().setSp(18),
+            fontWeight: FontWeight.w500,
+            color: const Color.fromARGB(255, 255, 255, 255),
+            height: 1.305,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Positioned searchBarHeader() {
+    return Positioned(
+      top: ScreenUtil().setHeight(50),
+      left: ScreenUtil().setWidth(32),
+      child: Text(
+        'Procurar CEP',
+        style: GoogleFonts.poppins(
+          fontSize: ScreenUtil().setSp(27),
+          fontWeight: FontWeight.w600,
+          color: const Color.fromARGB(255, 255, 255, 255),
+          height: 1.125,
+        ),
       ),
     );
   }
@@ -175,83 +194,107 @@ Widget _buildCard(BuildContext context, CepModel cepModel) {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Endereço:',
-          textAlign: TextAlign.start,
-          style: GoogleFonts.poppins(
-            fontSize: ScreenUtil().setSp(19),
-            fontWeight: FontWeight.w500,
-            color: const Color.fromARGB(255, 109, 81, 255),
-            letterSpacing: 0.013,
-            height: 1.11,
-          ),
-        ),
+        cepDetailsHeader(),
         Padding(padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(17))),
-        Text(
-          '${cepModel.logradouro} - ${cepModel.complemento} - ${cepModel.localidade} ${cepModel.uf} -\nCEP ${cepModel.cep}',
-          style: GoogleFonts.poppins(
-            fontSize: ScreenUtil().setSp(15),
-            fontWeight: FontWeight.w400,
-            color: const Color.fromARGB(255, 0, 0, 0),
-            letterSpacing: 0.013,
-            height: 1.4,
-          ),
-        ),
+        cepDetails(cepModel),
         Padding(padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(29))),
-        InkWell(
-          onTap: () {
+        saveCepButton(
+          context,
+          cepModel,
+          isCepSaved,
+        ),
+      ],
+    ),
+  );
+}
+
+Text cepDetailsHeader() {
+  return Text(
+    'Endereço:',
+    textAlign: TextAlign.start,
+    style: GoogleFonts.poppins(
+      fontSize: ScreenUtil().setSp(19),
+      fontWeight: FontWeight.w500,
+      color: const Color.fromARGB(255, 109, 81, 255),
+      letterSpacing: 0.013,
+      height: 1.11,
+    ),
+  );
+}
+
+Text cepDetails(CepModel cepModel) {
+  return Text(
+    '${cepModel.logradouro} - ${cepModel.complemento} - ${cepModel.localidade} ${cepModel.uf} -\nCEP ${cepModel.cep}',
+    style: GoogleFonts.poppins(
+      fontSize: ScreenUtil().setSp(15),
+      fontWeight: FontWeight.w400,
+      color: const Color.fromARGB(255, 0, 0, 0),
+      letterSpacing: 0.013,
+      height: 1.4,
+    ),
+  );
+}
+
+Widget saveCepButton(BuildContext context, CepModel cepModel, bool isCepSaved) {
+  return InkWell(
+    onTap: isCepSaved
+        ? () {
+            BlocProvider.of<CepBloc>(context).add(const GetSavedCeps());
+          }
+        : () {
             BlocProvider.of<CepBloc>(context).add(SaveCep(cepModel: cepModel));
           },
-          child: Container(
-            width: ScreenUtil().setWidth(296),
-            height: ScreenUtil().setHeight(48),
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              color: isCepSaved
-                  ? const Color.fromARGB(255, 245, 245, 248)
-                  : const Color.fromARGB(255, 46, 23, 157),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(72),
+    child: Container(
+      width: ScreenUtil().setWidth(296),
+      height: ScreenUtil().setHeight(48),
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        color: isCepSaved
+            ? const Color.fromARGB(255, 245, 245, 248)
+            : const Color.fromARGB(255, 46, 23, 157),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(72),
+        ),
+      ),
+      child: saveCepDecoration(isCepSaved),
+    ),
+  );
+}
+
+Padding saveCepDecoration(bool isCepSaved) {
+  return Padding(
+    padding: EdgeInsets.only(
+      left: ScreenUtil().setWidth(23),
+      right: ScreenUtil().setWidth(23),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        isCepSaved
+            ? Icon(
+                CustomIcons.starsaved,
+                color: const Color.fromARGB(255, 234, 183, 1),
+                size: ScreenUtil().setHeight(24),
+              )
+            : Icon(
+                CustomIcons.star,
+                color: const Color.fromARGB(255, 180, 166, 255),
+                size: ScreenUtil().setHeight(24),
               ),
-            ),
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: ScreenUtil().setWidth(23),
-                right: ScreenUtil().setWidth(23),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  isCepSaved
-                      ? Icon(
-                          CustomIcons.starsaved,
-                          color: const Color.fromARGB(255, 234, 183, 1),
-                          size: ScreenUtil().setHeight(24),
-                        )
-                      : Icon(
-                          CustomIcons.star,
-                          color: const Color.fromARGB(255, 180, 166, 255),
-                          size: ScreenUtil().setHeight(24),
-                        ),
-                  Text(
-                    'Adicionar aos favoritos',
-                    style: GoogleFonts.hind(
-                      fontSize: ScreenUtil().setSp(16),
-                      fontWeight: FontWeight.w500,
-                      color: isCepSaved
-                          ? const Color.fromARGB(255, 123, 97, 255)
-                          : const Color.fromARGB(255, 255, 255, 255),
-                      letterSpacing: 0.013,
-                      height: 1,
-                    ),
-                  ),
-                  SizedBox(
-                    width: ScreenUtil().setHeight(24),
-                  ),
-                ],
-              ),
-            ),
+        Text(
+          'Adicionar aos favoritos',
+          style: GoogleFonts.hind(
+            fontSize: ScreenUtil().setSp(16),
+            fontWeight: FontWeight.w500,
+            color: isCepSaved
+                ? const Color.fromARGB(255, 123, 97, 255)
+                : const Color.fromARGB(255, 255, 255, 255),
+            letterSpacing: 0.013,
+            height: 1,
           ),
+        ),
+        SizedBox(
+          width: ScreenUtil().setHeight(24),
         ),
       ],
     ),

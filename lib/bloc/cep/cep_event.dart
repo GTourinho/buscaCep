@@ -17,3 +17,7 @@ class SaveCep extends CepEvent {
   final CepModel cepModel;
   const SaveCep({required this.cepModel});
 }
+
+class GetSavedCeps extends CepEvent {
+  const GetSavedCeps();
+}

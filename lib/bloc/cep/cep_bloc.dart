@@ -1,13 +1,17 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:myapp/bloc/cep/cep_event.dart';
 import 'package:myapp/bloc/cep/cep_state.dart';
+import '../../models/cep_model.dart';
 import '../../resources/api_repository.dart';
 
 class CepBloc extends Bloc<CepEvent, CepState> {
   CepBloc() : super(CepInitial()) {
     final ApiRepository apiRepository = ApiRepository();
-    final LocalStorage storage = LocalStorage('some_key');
+    final LocalStorage storage = LocalStorage('ceps');
+    final List<CepModel> cepModels = storage.getItem('ceps') ?? [];
 
     on<GetCep>((event, emit) async {
       try {
@@ -17,7 +21,7 @@ class CepBloc extends Bloc<CepEvent, CepState> {
         if (mList.error != null) {
           emit(CepError(mList.error));
         }
-        if (mList.cep == null) {
+        if (mList.cep == '') {
           emit(const CepError(
               "Não conseguimos localizar seu endereço, verifique se as informações passadas estão corretas"));
         }
@@ -29,9 +33,32 @@ class CepBloc extends Bloc<CepEvent, CepState> {
       }
     });
 
-    on<SaveCep>((event, emit) async {
-      storage.setItem('cep', event.cepModel);
-      emit(CepSaved(event.cepModel));
-    });
+    on<SaveCep>(
+      (event, emit) async {
+        cepModels.add(event.cepModel);
+        await storage.ready;
+        storage.setItem('ceps', cepModels);
+        emit(CepSaved(event.cepModel));
+      },
+    );
+
+    on<GetSavedCeps>(
+      (event, emit) async {
+        try {
+          await storage.ready;
+          final mList = await storage.getItem('ceps');
+          if (mList == null) {
+            emit(const CepError("Não há ceps salvas"));
+          } else {
+            emit(SavedCepsLoaded(mList));
+          }
+        } on NetworkError {
+          emit(
+            const CepError(
+                "Falha ao buscar dados. Verifique sua conexão com a internet"),
+          );
+        }
+      },
+    );
   }
 }

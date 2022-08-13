@@ -17,6 +17,11 @@ class CepLoaded extends CepState {
   const CepLoaded(this.cepModel);
 }
 
+class SavedCepsLoaded extends CepState {
+  final List<CepModel> cepModels;
+  const SavedCepsLoaded(this.cepModels);
+}
+
 class CepSaved extends CepState {
   final CepModel cepModel;
   const CepSaved(this.cepModel);

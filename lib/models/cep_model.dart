@@ -1,5 +1,5 @@
 class CepModel {
-  String? cep;
+  String cep = '';
   String? logradouro;
   String? complemento;
   String? bairro;
@@ -10,9 +10,8 @@ class CepModel {
   String? ddd;
   String? siafi;
   String? error;
-
   CepModel(
-      {this.cep,
+      {required this.cep,
       this.logradouro,
       this.complemento,
       this.bairro,
