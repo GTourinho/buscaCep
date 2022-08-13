@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
               const WelcomeBar(),
               const BackgroundImage(),
               searchAmounts(context, state),
-              const SavedCEPS(),
+              savedCEPS(context, state),
             ],
           ),
           bottomNavigationBar: const BottomNavigation(),
@@ -169,80 +169,76 @@ Text searchAmountsDetailsText(BuildContext context, CepState state) {
   );
 }
 
-class SavedCEPS extends StatelessWidget {
-  const SavedCEPS({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: ScreenUtil().setHeight(624),
-      left: ScreenUtil().setWidth(32),
-      child: Container(
-        height: ScreenUtil().setHeight(57),
-        width: ScreenUtil().setWidth(296),
-        decoration: const BoxDecoration(
-          shape: BoxShape.rectangle,
-          color: Color.fromARGB(255, 246, 244, 255),
-          borderRadius: BorderRadius.all(
-            Radius.circular(100),
-          ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(
-              ScreenUtil().setWidth(16), 0, ScreenUtil().setWidth(16), 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              savedCepsDecoration(),
-              savedCepsAmountBox(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container savedCepsAmountBox() {
-    return Container(
-      height: ScreenUtil().setHeight(25),
-      width: ScreenUtil().setWidth(25),
+Widget savedCEPS(BuildContext context, CepState state) {
+  return Positioned(
+    top: ScreenUtil().setHeight(624),
+    left: ScreenUtil().setWidth(32),
+    child: Container(
+      height: ScreenUtil().setHeight(57),
+      width: ScreenUtil().setWidth(296),
       decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: Color.fromARGB(255, 123, 97, 255),
-      ),
-      child: Center(
-        child: Text(
-          '3',
-          style: GoogleFonts.poppins(
-            fontSize: ScreenUtil().setSp(13),
-            fontWeight: FontWeight.w400,
-            color: const Color.fromARGB(255, 255, 255, 255),
-            letterSpacing: -0.00615385,
-          ),
+        shape: BoxShape.rectangle,
+        color: Color.fromARGB(255, 246, 244, 255),
+        borderRadius: BorderRadius.all(
+          Radius.circular(100),
         ),
       ),
-    );
-  }
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+            ScreenUtil().setWidth(16), 0, ScreenUtil().setWidth(16), 0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            savedCepsDecoration(),
+            savedCepsAmountBox(context, state),
+          ],
+        ),
+      ),
+    ),
+  );
+}
 
-  Row savedCepsDecoration() {
-    return Row(
-      children: [
-        const Icon(
-          CustomIcons.saved,
-          color: Color.fromARGB(255, 180, 165, 253),
+Container savedCepsAmountBox(BuildContext context, CepState state) {
+  return Container(
+    height: ScreenUtil().setHeight(25),
+    width: ScreenUtil().setWidth(25),
+    decoration: const BoxDecoration(
+      shape: BoxShape.circle,
+      color: Color.fromARGB(255, 123, 97, 255),
+    ),
+    child: Center(
+      child: Text(
+        state is CepAmountsLoaded ? state.savedAmount.toString() : '0',
+        style: GoogleFonts.poppins(
+          fontSize: ScreenUtil().setSp(13),
+          fontWeight: FontWeight.w400,
+          color: const Color.fromARGB(255, 255, 255, 255),
+          letterSpacing: -0.00615385,
         ),
-        SizedBox(
-          height: ScreenUtil().setWidth(28.75),
+      ),
+    ),
+  );
+}
+
+Row savedCepsDecoration() {
+  return Row(
+    children: [
+      const Icon(
+        CustomIcons.saved,
+        color: Color.fromARGB(255, 180, 165, 253),
+      ),
+      SizedBox(
+        height: ScreenUtil().setWidth(28.75),
+      ),
+      Text(
+        'CEPs salvos',
+        style: GoogleFonts.poppins(
+          fontSize: ScreenUtil().setSp(15),
+          fontWeight: FontWeight.w600,
+          color: const Color.fromARGB(255, 123, 97, 255),
+          letterSpacing: -0.016,
         ),
-        Text(
-          'CEPs salvos',
-          style: GoogleFonts.poppins(
-            fontSize: ScreenUtil().setSp(15),
-            fontWeight: FontWeight.w600,
-            color: const Color.fromARGB(255, 123, 97, 255),
-            letterSpacing: -0.016,
-          ),
-        ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
 }

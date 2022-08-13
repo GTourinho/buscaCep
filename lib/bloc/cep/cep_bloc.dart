@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:myapp/bloc/cep/cep_event.dart';
