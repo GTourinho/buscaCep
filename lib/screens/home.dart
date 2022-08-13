@@ -42,37 +42,41 @@ class WelcomeBar extends StatelessWidget {
             ScreenUtil().setWidth(32),
             0,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: welcomeBarText(),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+    );
+  }
+
+  Row welcomeBarText() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text.rich(
+          TextSpan(
+            text: 'Olá,\n',
+            style: GoogleFonts.poppins(
+              fontSize: ScreenUtil().setSp(27),
+              fontWeight: FontWeight.w500,
+              color: const Color.fromARGB(255, 21, 21, 21),
+              height: 1.125,
+            ),
             children: [
-              Text.rich(
-                TextSpan(
-                  text: 'Olá,\n',
-                  style: GoogleFonts.poppins(
-                    fontSize: ScreenUtil().setSp(27),
-                    fontWeight: FontWeight.w500,
-                    color: const Color.fromARGB(255, 21, 21, 21),
-                    height: 1.125,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: 'Bem-vindo',
-                      style: GoogleFonts.poppins(
-                        fontSize: ScreenUtil().setSp(27),
-                        fontWeight: FontWeight.w600,
-                        color: const Color.fromARGB(255, 21, 21, 21),
-                        height: 1.125,
-                      ),
-                    ),
-                  ],
+              TextSpan(
+                text: 'Bem-vindo',
+                style: GoogleFonts.poppins(
+                  fontSize: ScreenUtil().setSp(27),
+                  fontWeight: FontWeight.w600,
+                  color: const Color.fromARGB(255, 21, 21, 21),
+                  height: 1.125,
                 ),
               ),
             ],
           ),
         ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+      ],
     );
   }
 }
@@ -107,36 +111,44 @@ class SearchAmounts extends StatelessWidget {
           shape: BoxShape.circle,
           color: Color.fromARGB(255, 109, 81, 255),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              CustomIcons.signpost,
-              size: ScreenUtil().setHeight(52),
-              color: const Color.fromARGB(255, 180, 166, 255),
-            ),
-            Text.rich(
-              TextSpan(
-                text: '525',
-                style: GoogleFonts.inter(
-                  fontSize: ScreenUtil().setSp(60),
-                  fontWeight: FontWeight.w500,
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                ),
-                children: [
-                  TextSpan(
-                    text: '\nCEPs pesquisados',
-                    style: GoogleFonts.inter(
-                      fontSize: ScreenUtil().setSp(12),
-                      fontWeight: FontWeight.w500,
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+        child: searchAmountsDetails(),
+      ),
+    );
+  }
+
+  Column searchAmountsDetails() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          CustomIcons.signpost,
+          size: ScreenUtil().setHeight(52),
+          color: const Color.fromARGB(255, 180, 166, 255),
         ),
+        searchAmountsDetailsText(),
+      ],
+    );
+  }
+
+  Text searchAmountsDetailsText() {
+    return Text.rich(
+      TextSpan(
+        text: '525',
+        style: GoogleFonts.inter(
+          fontSize: ScreenUtil().setSp(60),
+          fontWeight: FontWeight.w500,
+          color: const Color.fromARGB(255, 255, 255, 255),
+        ),
+        children: [
+          TextSpan(
+            text: '\nCEPs pesquisados',
+            style: GoogleFonts.inter(
+              fontSize: ScreenUtil().setSp(12),
+              fontWeight: FontWeight.w500,
+              color: const Color.fromARGB(255, 255, 255, 255),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -165,49 +177,57 @@ class SavedCEPS extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const Icon(
-                    CustomIcons.saved,
-                    color: Color.fromARGB(255, 180, 165, 253),
-                  ),
-                  SizedBox(
-                    height: ScreenUtil().setWidth(28.75),
-                  ),
-                  Text(
-                    'CEPs salvos',
-                    style: GoogleFonts.poppins(
-                      fontSize: ScreenUtil().setSp(15),
-                      fontWeight: FontWeight.w600,
-                      color: const Color.fromARGB(255, 123, 97, 255),
-                      letterSpacing: -0.016,
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                height: ScreenUtil().setHeight(25),
-                width: ScreenUtil().setWidth(25),
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color.fromARGB(255, 123, 97, 255),
-                ),
-                child: Center(
-                  child: Text(
-                    '3',
-                    style: GoogleFonts.poppins(
-                      fontSize: ScreenUtil().setSp(13),
-                      fontWeight: FontWeight.w400,
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                      letterSpacing: -0.00615385,
-                    ),
-                  ),
-                ),
-              ),
+              savedCepsDecoration(),
+              savedCepsAmountBox(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Container savedCepsAmountBox() {
+    return Container(
+      height: ScreenUtil().setHeight(25),
+      width: ScreenUtil().setWidth(25),
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color.fromARGB(255, 123, 97, 255),
+      ),
+      child: Center(
+        child: Text(
+          '3',
+          style: GoogleFonts.poppins(
+            fontSize: ScreenUtil().setSp(13),
+            fontWeight: FontWeight.w400,
+            color: const Color.fromARGB(255, 255, 255, 255),
+            letterSpacing: -0.00615385,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Row savedCepsDecoration() {
+    return Row(
+      children: [
+        const Icon(
+          CustomIcons.saved,
+          color: Color.fromARGB(255, 180, 165, 253),
+        ),
+        SizedBox(
+          height: ScreenUtil().setWidth(28.75),
+        ),
+        Text(
+          'CEPs salvos',
+          style: GoogleFonts.poppins(
+            fontSize: ScreenUtil().setSp(15),
+            fontWeight: FontWeight.w600,
+            color: const Color.fromARGB(255, 123, 97, 255),
+            letterSpacing: -0.016,
+          ),
+        ),
+      ],
     );
   }
 }
