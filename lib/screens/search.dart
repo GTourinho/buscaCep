@@ -11,15 +11,12 @@ class Search extends StatelessWidget {
   const Search({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CepBloc(),
-      child: Scaffold(
-        appBar: PreferredSize(
-            preferredSize: Size.fromHeight(ScreenUtil().setHeight(232)),
-            child: const SearchBar()),
-        body: const SearchResults(),
-        bottomNavigationBar: const BottomNavigation(),
-      ),
+    return Scaffold(
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(ScreenUtil().setHeight(232)),
+          child: const SearchBar()),
+      body: const SearchResults(),
+      bottomNavigationBar: const BottomNavigation(),
     );
   }
 }
@@ -237,13 +234,9 @@ Text cepDetails(CepModel cepModel) {
 
 Widget saveCepButton(BuildContext context, CepModel cepModel, bool isCepSaved) {
   return InkWell(
-    onTap: isCepSaved
-        ? () {
-            BlocProvider.of<CepBloc>(context).add(const GetSavedCeps());
-          }
-        : () {
-            BlocProvider.of<CepBloc>(context).add(SaveCep(cepModel: cepModel));
-          },
+    onTap: () {
+      BlocProvider.of<CepBloc>(context).add(SaveCep(cepModel: cepModel));
+    },
     child: Container(
       width: ScreenUtil().setWidth(296),
       height: ScreenUtil().setHeight(48),

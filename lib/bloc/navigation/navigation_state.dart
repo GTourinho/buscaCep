@@ -1,7 +1,7 @@
 enum NavItem {
   home,
   search,
-  favorites,
+  favourites,
 }
 
 class NavigationState {

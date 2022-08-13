@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myapp/bloc/cep/blocs.dart';
 import 'package:myapp/screens/home.dart';
 import 'package:myapp/screens/search.dart';
 import '../bloc/navigation/blocs.dart';
@@ -14,9 +15,16 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<NavigationBloc>(
-      create: (context) =>
-          NavigationBloc(const NavigationState(currentNavItem: NavItem.home)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<NavigationBloc>(
+          create: (context) => NavigationBloc(
+              const NavigationState(currentNavItem: NavItem.home)),
+        ),
+        BlocProvider<CepBloc>(
+          create: (context) => CepBloc(),
+        ),
+      ],
       child: ScreenUtilInit(
         designSize: const Size(360, 800),
         minTextAdapt: true,

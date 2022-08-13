@@ -12,4 +12,24 @@ main() {
       verify: (bloc) async {
         expect(bloc.state.currentNavItem, NavItem.home);
       });
+
+  blocTest<NavigationBloc, NavigationState>(
+      'Emits [NavigationState] when NavigateTo(NavItem.search) is added',
+      build: () =>
+          NavigationBloc(const NavigationState(currentNavItem: NavItem.home)),
+      act: (bloc) async =>
+          bloc.add(const NavigateTo(destination: NavItem.search)),
+      verify: (bloc) async {
+        expect(bloc.state.currentNavItem, NavItem.search);
+      });
+
+  blocTest<NavigationBloc, NavigationState>(
+      'Emits [NavigationState] when NavigateTo(NavItem.favourites) is added',
+      build: () =>
+          NavigationBloc(const NavigationState(currentNavItem: NavItem.home)),
+      act: (bloc) async =>
+          bloc.add(const NavigateTo(destination: NavItem.favourites)),
+      verify: (bloc) async {
+        expect(bloc.state.currentNavItem, NavItem.favourites);
+      });
 }
