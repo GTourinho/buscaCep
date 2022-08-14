@@ -25,4 +25,15 @@ main() {
       expect(bloc.state, CepSaving());
     },
   );
+
+  blocTest<CepBloc, CepState>(
+    'Emits [CepLoading] when [GetCep] is added',
+    build: () => CepBloc(),
+    act: (bloc) async {
+      bloc.add(const GetCep(cep: '12345678'));
+    },
+    verify: (bloc) async {
+      expect(bloc.state, CepLoading());
+    },
+  );
 }
