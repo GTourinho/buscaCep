@@ -64,7 +64,7 @@ class _SearchBarState extends State<SearchBar> {
             Radius.circular(100),
           ),
         ),
-        child: searchTextField(context),
+        child: Center(child: searchTextField(context)),
       ),
     );
   }
