@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:myapp/bloc/cep/blocs.dart';
@@ -108,6 +106,8 @@ class CepBloc extends Bloc<CepEvent, CepState> {
         await storage.ready;
         await storage.setItem('ceps', CepModel.toJsonList(cepModels));
         emit(SavedCepsLoaded(cepModels));
+        await storage.ready;
+        await storage.setItem('savedAmount', (cepModels.length).toString());
       } on Error {
         emit(const CepError("Erro ao remover o cep"));
       }
