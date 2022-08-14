@@ -34,12 +34,12 @@ class _FavouritesState extends State<Favourites> {
             left: ScreenUtil().setWidth(32),
             right: ScreenUtil().setWidth(32),
           ),
-          physics: ScrollPhysics(),
+          physics: const ScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: const [
               FavouritesHeader(),
-              const FavouritesList(),
+              FavouritesList(),
             ],
           ),
         ),
@@ -56,14 +56,14 @@ class FavouritesHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: ScreenUtil().setHeight(76.06),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const FavouritesHeaderIcon(),
-          const FavouritesHeaderText(),
+        children: const [
+          FavouritesHeaderIcon(),
+          FavouritesHeaderText(),
         ],
       ),
     );
@@ -122,7 +122,7 @@ class _FavouritesListState extends State<FavouritesList> {
           return ListView.separated(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             separatorBuilder: ((context, index) => SizedBox(
                   height: ScreenUtil().setHeight(7),
                 )),
@@ -131,7 +131,7 @@ class _FavouritesListState extends State<FavouritesList> {
             ),
             itemCount: state.cepModels.length,
             itemBuilder: (context, index) {
-              return cepContainer();
+              return cepContainer(context, state, index);
             },
           );
         } else {
@@ -143,15 +143,64 @@ class _FavouritesListState extends State<FavouritesList> {
     );
   }
 
-  Container cepContainer() {
+  Container cepContainer(
+      BuildContext context, SavedCepsLoaded state, int index) {
     return Container(
-      height: ScreenUtil().setHeight(101),
+      height: ScreenUtil().setHeight(103),
       width: ScreenUtil().setWidth(296),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
-        color: Color.fromARGB(255, 255, 255, 255),
+        color: const Color.fromARGB(255, 255, 255, 255),
         borderRadius: BorderRadius.all(
           Radius.circular(ScreenUtil().setHeight(8)),
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(left: ScreenUtil().setWidth(16)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  state.cepModels[index].cep,
+                  style: GoogleFonts.poppins(
+                    fontSize: ScreenUtil().setSp(15),
+                    fontWeight: FontWeight.w500,
+                    color: const Color.fromARGB(255, 89, 89, 89),
+                    height: 1.4,
+                    letterSpacing: 0.013,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    CustomIcons.subtract,
+                    size: ScreenUtil().setHeight(20.5),
+                  ),
+                  color: const Color.fromARGB(255, 109, 81, 255),
+                  onPressed: (() => {
+                        BlocProvider.of<CepBloc>(context).add(
+                          RemoveSavedCep(cepModel: state.cepModels[index]),
+                        ),
+                      }),
+                ),
+              ],
+            ),
+            Text(
+              state.cepModels[index].complemento != ""
+                  ? '${state.cepModels[index].logradouro} - ${state.cepModels[index].complemento} - ${state.cepModels[index].localidade} ${state.cepModels[index].uf} - CEP ${state.cepModels[index].cep}'
+                  : '${state.cepModels[index].logradouro} - ${state.cepModels[index].localidade} ${state.cepModels[index].uf} - CEP ${state.cepModels[index].cep}',
+              style: GoogleFonts.poppins(
+                fontSize: ScreenUtil().setSp(15),
+                fontWeight: FontWeight.w400,
+                color: const Color.fromARGB(255, 69, 69, 69),
+                height: 1.62,
+                letterSpacing: 0.013,
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:myapp/bloc/cep/cep_event.dart';
-import 'package:myapp/bloc/cep/cep_state.dart';
+import 'package:myapp/bloc/cep/blocs.dart';
 import '../../models/cep_model.dart';
 import '../../resources/api_repository.dart';
 
@@ -97,5 +98,19 @@ class CepBloc extends Bloc<CepEvent, CepState> {
         }
       },
     );
+    on<RemoveSavedCep>((event, emit) async {
+      try {
+        emit(SavedCepsLoading());
+        await storage.ready;
+        final mList = await storage.getItem('ceps');
+        final List<CepModel> cepModels = await CepModel.fromJsonList(mList);
+        cepModels.removeWhere((cepModel) => cepModel.cep == event.cepModel.cep);
+        await storage.ready;
+        await storage.setItem('ceps', CepModel.toJsonList(cepModels));
+        emit(SavedCepsLoaded(cepModels));
+      } on Error {
+        emit(const CepError("Erro ao remover o cep"));
+      }
+    });
   }
 }

@@ -25,3 +25,8 @@ class GetSavedCeps extends CepEvent {
 class GetAmounts extends CepEvent {
   const GetAmounts();
 }
+
+class RemoveSavedCep extends CepEvent {
+  final CepModel cepModel;
+  const RemoveSavedCep({required this.cepModel});
+}

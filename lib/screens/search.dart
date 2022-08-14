@@ -221,7 +221,9 @@ Text cepDetailsHeader() {
 
 Text cepDetails(CepModel cepModel) {
   return Text(
-    '${cepModel.logradouro} - ${cepModel.complemento} - ${cepModel.localidade} ${cepModel.uf} -\nCEP ${cepModel.cep}',
+    cepModel.complemento != ''
+        ? '${cepModel.logradouro} - ${cepModel.complemento} - ${cepModel.localidade} ${cepModel.uf} -\nCEP ${cepModel.cep}'
+        : '${cepModel.logradouro} - ${cepModel.localidade} ${cepModel.uf} -\nCEP ${cepModel.cep}',
     style: GoogleFonts.poppins(
       fontSize: ScreenUtil().setSp(15),
       fontWeight: FontWeight.w400,
